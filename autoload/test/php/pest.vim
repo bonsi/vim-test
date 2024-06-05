@@ -41,7 +41,11 @@ function! test#php#pest#build_args(args, color) abort
 endfunction
 
 function! test#php#pest#executable() abort
-  if filereadable('./vendor/bin/pest')
+  if exists('g:test#php#pest#executable')
+    return g:test#php#phpunit#executable
+  elseif filereadable('./vendor/bin/sail') && (filereadable('./docker-compose.yml') || filereadable('./docker-compose.yaml'))
+    return './vendor/bin/sail pest'
+  elseif filereadable('./vendor/bin/pest')
     return './vendor/bin/pest'
   elseif filereadable('./bin/pest')
     return './bin/pest'
